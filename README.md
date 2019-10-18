@@ -65,7 +65,7 @@ parser.parse_each(:property) do |property|
 end
 ```
 
-Will print out
+Outputs
 
 ```
 Property id[2] title[Test 2]
@@ -83,7 +83,8 @@ parser.parse_each(:property, arrays: ['images']) do |property|
 end
 ```
 
-Will print out
+Outputs
+
 ```
 Property id[2] images ["http://test.com/1.jpg", "http://test.com/2.jpg"]
 Property id[3] images ["http://test.com/4.jpg", "http://test.com/5.jpg"]
@@ -98,6 +99,15 @@ parser.parse_each(:property) do |property, ancestor|
   puts "Property id[#{property.attrs['id']}] agency id[#{ancestor['agency'].attrs['id']}]"
 end
 ```
+
+Outputs
+
+```
+Property id[2] agency id[1]
+Property id[3] agency id[1]
+Property id[4] agency id[2]
+```
+
 Now maybe you're lazy like me and don't care about the `agencies` element and want the `agency` to be the oldest ancestor.
 
 ```ruby
@@ -107,7 +117,15 @@ parser.parse_each(:property, ignore: ['agencies']) do |property, ancestor|
 end
 ```
 
-You can also use `ignore` to make speed up processing by allowing the parser to know that it doesn't need to keep track of the those elements.
+Outputs
+
+```
+Property id[2] agency id[1]
+Property id[3] agency id[1]
+Property id[4] agency id[2]
+```
+
+You can also use `ignore` to speed up the parser by allowing it to know that it doesn't need to keep track of the those elements.
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
