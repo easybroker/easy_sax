@@ -73,6 +73,8 @@ Property id[3] title[Test 3]
 Property id[4] title[Test 4]
 ```
 
+You can also use the `text_for` method if you prefer to get text elements. `property.text_for(:title)` is the same as `property[:title].text` except it returns nil if the title element doesn't exist.
+
 If you want to print the property image urls you need to let the parser know that it is an array
 
 ```ruby

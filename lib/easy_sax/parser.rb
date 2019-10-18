@@ -64,7 +64,7 @@ class EasySax::Parser < Nokogiri::XML::SAX::Document
     if array.nil?
       []
     elsif array.kind_of?(Array)
-      array
+      array.map { |element| element.to_s }
     else
       raise ArgumentError, ("%s must be an Array" % field)
     end

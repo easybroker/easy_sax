@@ -162,7 +162,7 @@ class ParserTest < Minitest::Test
   def test_target_element_with_child_arrays
     properties = {}
     new_parser.parse_each(:property,
-      arrays: %w{images}
+      arrays: [:images]
     ) do |property|
       property_id = property.attrs['id'].to_i
       properties[property_id] = property['images'].map { |image| image.attrs['url'] }
