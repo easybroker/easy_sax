@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'pry'
 
 class ParserTest < Minitest::Test
   TEST_XML = %{
@@ -156,6 +157,22 @@ class ParserTest < Minitest::Test
     assert_nil last_agency['property']
     assert_equal 'Test 4', properties[4].text_for(:title)
     assert_equal PROPERTY_3.to_s, properties[4].to_h.to_s
+  end
+
+  def test_target_element_with_child_arrays
+    properties = {}
+    new_parser.parse_each(:property,
+      arrays: %w{images}
+    ) do |property|
+      property_id = property.attrs['id'].to_i
+      properties[property_id] = property['images'].map { |image| image.attrs['url'] }
+    end
+
+    [PROPERTY_1, PROPERTY_2, PROPERTY_3].each do |property|
+      urls = property[:elements]['images'].map {|hash| hash[:attrs]['url']}
+      id = property[:attrs]['id'].to_i
+      assert_equal urls, properties[id]
+    end
   end
 
   def test_invalid_xml_throws_error

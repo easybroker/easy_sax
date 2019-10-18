@@ -61,7 +61,7 @@ You can parse all the property elements with
 ```ruby
 parser = EasySax.parser(File.open('test.xml'))
 parser.parse_each(:property) do |property|
-  puts "Property id[#{property.attrs['id']}] title[#{property['title'].text}]"
+  puts "Property id[#{property.attrs[:id]}] title[#{property[:title].text}]"
 end
 ```
 
@@ -78,8 +78,8 @@ If you want to print the property image urls you need to let the parser know tha
 ```ruby
 parser = EasySax.parser(File.open('test.xml'))
 parser.parse_each(:property, arrays: ['images']) do |property|
-  image_urls = property['images'].map { |image| image.attrs['url'] }
-  puts "Property id[#{property.attrs['id']}] images#{image_urls}"
+  image_urls = property[:images].map { |image| image.attrs[:url] }
+  puts "Property id[#{property.attrs[:id]}] images#{image_urls}"
 end
 ```
 
@@ -96,7 +96,7 @@ Now for something really cool. If you want the root ancestor use the second para
 ```ruby
 parser = EasySax.parser(File.open('test.xml'))
 parser.parse_each(:property) do |property, ancestor|
-  puts "Property id[#{property.attrs['id']}] agency id[#{ancestor['agency'].attrs['id']}]"
+  puts "Property id[#{property.attrs[:id]}] agency id[#{ancestor[:agency].attrs[:id]}]"
 end
 ```
 
@@ -113,7 +113,7 @@ Now maybe you're lazy like me and don't care about the `agencies` element and wa
 ```ruby
 parser = EasySax.parser(File.open('test.xml'))
 parser.parse_each(:property, ignore: ['agencies']) do |property, ancestor|
-  puts "Property id[#{property.attrs['id']}] agency id[#{ancestor.attrs['id']}]"
+  puts "Property id[#{property.attrs[:id]}] agency id[#{ancestor.attrs[:id]}]"
 end
 ```
 
