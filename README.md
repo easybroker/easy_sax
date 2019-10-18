@@ -1,6 +1,6 @@
 # EasySax
 
-EasySax allows you to easily parse large files without the messy syntax needed for workign with most Sax parsers. It was inspired after attempting to use [SaxMachine](https://github.com/pauldix/sax-machine) to parse a 500mb which resulted in over 2gbs of memory consumption inside of a Rails app. EasySax is very lightweight and only stores the element currently being used in memory and also allows you to access parent elements without storing the whole parent tree in memory. For the scenario above, memory usage remained at 300mb and went from taking 7 days to parse the file to 1 hour. This also includes time that was used for other actions besides parsing.
+EasySax allows you to easily parse large files without the messy syntax needed for working with most Sax parsers. It was inspired after attempting to use [SaxMachine](https://github.com/pauldix/sax-machine) to parse a 500mb XML file that resulted in a huge spike to 2gbs of memory inside a Rails app. EasySax is very lightweight and only stores the element currently being used in memory. It also allows you to access parent elements without storing the whole parent tree in memory. For the scenario above with the Rails app, with EasySax memory usage stayed a constant 300mb and instead of 7 days to parse the file to 1 hour. This also includes time that was used for other actions besides parsing and the initial Rails app used about 250mb of memory.
 
 ## Installation
 
@@ -19,15 +19,95 @@ Or install it yourself as:
     $ gem install easy_sax
 
 ## Usage
+Given the following test XML
+```xml
+<agencies>
+  <agency id="1">
+    <name>Foo</name>
+    <phone>12345678</phone>
+    <properties>
+      <property id="2">
+        <title>Test 2</title>
+        <images>
+          <image url="http://test.com/1.jpg"/>
+          <image url="http://test.com/2.jpg"/>
+        </images>
+      </property>
+      <property id="3">
+        <title>Test 3</title>
+        <images>
+          <image url="http://test.com/4.jpg"/>
+          <image url="http://test.com/5.jpg"/>
+        </images>
+      </property>
+    </properties>
+  </agency>
+  <agency id="2">
+    <name>Bar</name>
+    <properties>
+      <property id="4">
+        <title>Test 4</title>
+        <images>
+          <image url="http://test.com/3.jpg"/>
+          <image url="http://test.com/4.jpg"/>
+        </images>
+      </property>
+    </properties>
+  </agency>
+</agencies>
+```
+You can parse all the property elements with
 
 ```ruby
-parser = EasySax.parse(File.open('test.xml'))
-parser.parse_each(:property).do |property|
-  puts property.attrs['id']
-  puts property.attrs['']
+parser = EasySax.parser(File.open('test.xml'))
+parser.parse_each(:property) do |property|
+  puts "Property id[#{property.attrs['id']}] title[#{property['title'].text}]"
 end
 ```
 
+Will print out
+
+```
+Property id[2] title[Test 2]
+Property id[3] title[Test 3]
+Property id[4] title[Test 4]
+```
+
+If you want to print the property image urls you need to let the parser know that it is an array
+
+```ruby
+parser = EasySax.parser(File.open('test.xml'))
+parser.parse_each(:property, arrays: ['images']) do |property|
+  image_urls = property['images'].map { |image| image.attrs['url'] }
+  puts "Property id[#{property.attrs['id']}] images#{image_urls}"
+end
+```
+
+Will print out
+```
+Property id[2] images ["http://test.com/1.jpg", "http://test.com/2.jpg"]
+Property id[3] images ["http://test.com/4.jpg", "http://test.com/5.jpg"]
+Property id[4] images ["http://test.com/3.jpg", "http://test.com/4.jpg"]
+```
+
+Now for something really cool. If you want the root ancestor use the second param in the `parse_each` block
+
+```ruby
+parser = EasySax.parser(File.open('test.xml'))
+parser.parse_each(:property) do |property, ancestor|
+  puts "Property id[#{property.attrs['id']}] agency id[#{ancestor['agency'].attrs['id']}]"
+end
+```
+Now maybe you're lazy like me and don't care about the `agencies` element and want the `agency` to be the oldest ancestor.
+
+```ruby
+parser = EasySax.parser(File.open('test.xml'))
+parser.parse_each(:property, ignore: ['agencies']) do |property, ancestor|
+  puts "Property id[#{property.attrs['id']}] agency id[#{ancestor.attrs['id']}]"
+end
+```
+
+You can also use `ignore` to make speed up processing by allowing the parser to know that it doesn't need to keep track of the those elements.
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
