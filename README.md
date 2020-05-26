@@ -1,6 +1,6 @@
 # EasySax
 
-EasySax allows you to easily parse large files without the messy syntax needed for working with most Sax parsers. It was inspired after attempting to use [SaxMachine](https://github.com/pauldix/sax-machine) to parse a 500mb XML file that resulted in a huge spike to 2gbs of memory inside a Rails app. EasySax is very lightweight and only stores the element currently being used in memory. It also allows you to access parent elements without storing the whole parent tree in memory. Testing with the same file mentioend above, the memory stayed constant and it processed the file much faster. EasySax is currently used in production at EasyBroker.
+EasySax allows you to easily parse large files without the messy syntax needed for working with most Sax parsers. It was inspired after attempting to use [SaxMachine](https://github.com/pauldix/sax-machine) to parse a 500mb XML file that resulted in a huge spike to 2gbs of memory inside a Rails app. EasySax is very lightweight and only stores the element currently being used in memory. It also allows you to access parent elements without storing the whole parent tree in memory. Testing with the same file above, the memory stayed constant and it processed the file much faster. EasySax is currently used in production at EasyBroker.
 
 ## Installation
 
