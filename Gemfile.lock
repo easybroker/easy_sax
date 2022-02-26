@@ -20,12 +20,14 @@ GEM
       concurrent-ruby (~> 1.0)
     method_source (1.0.0)
     minitest (5.14.4)
-    nokogiri (1.11.7-x86_64-darwin)
+    nokogiri (1.13.3-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.3-x86_64-linux)
       racc (~> 1.4)
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    racc (1.5.2)
+    racc (1.6.0)
     rake (13.0.6)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -33,6 +35,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-20
+  x86_64-linux
 
 DEPENDENCIES
   bundler (~> 2.2.24)
