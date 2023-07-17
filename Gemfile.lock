@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     easy_sax (0.1.3)
-      activesupport (~> 7.0.4.1)
-      nokogiri (~> 1.13.9)
+      activesupport (~> 7.0.4.3)
+      nokogiri (~> 1.13.10)
 
 GEM
   remote: https://rubygems.org/
