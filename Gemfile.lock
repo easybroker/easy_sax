@@ -40,11 +40,11 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  bundler (~> 2.2.24)
+  bundler (~> 2.3.6)
   easy_sax!
   minitest (~> 5.0)
   pry
   rake
 
 BUNDLED WITH
-   2.2.33
+   2.3.6
