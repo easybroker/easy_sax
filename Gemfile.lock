@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    easy_sax (0.1.5)
+    easy_sax (0.1.4)
       activesupport (~> 7.0.4.3)
-      nokogiri (~> 1.15.4)
+      nokogiri (~> 1.13.10)
 
 GEM
   remote: https://rubygems.org/
@@ -19,11 +19,11 @@ GEM
       concurrent-ruby (~> 1.0)
     method_source (1.0.0)
     minitest (5.18.1)
-    nokogiri (1.15.4-arm64-darwin)
+    nokogiri (1.13.10-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.15.4-x86_64-darwin)
+    nokogiri (1.13.10-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.15.4-x86_64-linux)
+    nokogiri (1.13.10-x86_64-linux)
       racc (~> 1.4)
     pry (0.14.1)
       coderay (~> 1.1)
