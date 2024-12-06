@@ -1,8 +1,8 @@
 require 'test_helper'
 require 'pry'
 
-class ParserTest < Minitest::Test
-  TEST_XML = %{
+module ParserTestHelper
+  TEST_XML = %(
     <agencies>
       <agency id="1">
         <name>Foo</name>
@@ -37,7 +37,7 @@ class ParserTest < Minitest::Test
         </properties>
       </agency>
     </agencies>
-  }
+  )
 
   PROPERTY_1 = {
     attrs: { 'id' => '2' },
@@ -47,11 +47,11 @@ class ParserTest < Minitest::Test
       },
       'images' => [
         {
-          attrs: { 'url' => 'http://test.com/1.jpg' },
+          attrs: { 'url' => 'http://test.com/1.jpg' }
         },
         {
-          attrs: { 'url' => 'http://test.com/2.jpg' },
-        },
+          attrs: { 'url' => 'http://test.com/2.jpg' }
+        }
       ]
     }
   }
@@ -64,11 +64,11 @@ class ParserTest < Minitest::Test
       },
       'images' => [
         {
-          attrs: { 'url' => 'http://test.com/4.jpg' },
+          attrs: { 'url' => 'http://test.com/4.jpg' }
         },
         {
-          attrs: { 'url' => 'http://test.com/5.jpg' },
-        },
+          attrs: { 'url' => 'http://test.com/5.jpg' }
+        }
       ]
     }
   }
@@ -81,11 +81,11 @@ class ParserTest < Minitest::Test
       },
       'images' => [
         {
-          attrs: { 'url' => 'http://test.com/3.jpg' },
+          attrs: { 'url' => 'http://test.com/3.jpg' }
         },
         {
-          attrs: { 'url' => 'http://test.com/4.jpg' },
-        },
+          attrs: { 'url' => 'http://test.com/4.jpg' }
+        }
       ]
     }
   }
@@ -97,9 +97,8 @@ class ParserTest < Minitest::Test
   def test_target_element_with_no_parents
     agencies = []
     new_parser.parse_each(:agency,
-      ignore: %w{agencies},
-      arrays: %w{properties features images}
-    ) do |agency|
+                          ignore: %w[agencies],
+                          arrays: %w[properties features images]) do |agency|
       agencies << agency
     end
 
@@ -127,9 +126,8 @@ class ParserTest < Minitest::Test
     agencies = {}
     properties = {}
     new_parser.parse_each(:property,
-      ignore: %w{agencies properties},
-      arrays: %w{features images}
-    ) do |property, agency|
+                          ignore: %w[agencies properties],
+                          arrays: %w[features images]) do |property, agency|
       property_id = property.attrs['id'].to_i
       properties[property_id] = property
       agencies[property_id] = agency
@@ -162,14 +160,13 @@ class ParserTest < Minitest::Test
   def test_target_element_with_child_arrays
     properties = {}
     new_parser.parse_each(:property,
-      arrays: [:images]
-    ) do |property|
+                          arrays: [:images]) do |property|
       property_id = property.attrs['id'].to_i
       properties[property_id] = property['images'].map { |image| image.attrs['url'] }
     end
 
     [PROPERTY_1, PROPERTY_2, PROPERTY_3].each do |property|
-      urls = property[:elements]['images'].map {|hash| hash[:attrs]['url']}
+      urls = property[:elements]['images'].map { |hash| hash[:attrs]['url'] }
       id = property[:attrs]['id'].to_i
       assert_equal urls, properties[id]
     end
@@ -188,22 +185,42 @@ class ParserTest < Minitest::Test
   def test_validates_param_options_should_be_arrays
     assert_raises ArgumentError do
       new_parser.parse_each(:property,
-        ignore: 'agencies properties',
-        arrays: %w{features images}
-      )
+                            ignore: 'agencies properties',
+                            arrays: %w[features images])
     end
 
     assert_raises ArgumentError do
       new_parser.parse_each(:property,
-        ignore: %w{agencies properties},
-        arrays: 'features images'
-      )
+                            ignore: %w[agencies properties],
+                            arrays: 'features images')
     end
   end
+end
+
+class EasySaxParserTest < Minitest::Test
+  include ParserTestHelper
 
   private
 
+  def parser_class
+    EasySax::Parser
+  end
+
   def new_parser
-    EasySax::Parser.new(StringIO.new(TEST_XML))
+    parser_class.new(StringIO.new(TEST_XML))
+  end
+end
+
+class EasySaxOxParserTest < Minitest::Test
+  include ParserTestHelper
+
+  private
+
+  def parser_class
+    EasySax::OxParser
+  end
+
+  def new_parser
+    parser_class.new(StringIO.new(TEST_XML))
   end
 end
