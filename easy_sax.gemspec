@@ -7,11 +7,11 @@ require 'easy_sax/version'
 Gem::Specification.new do |spec|
   spec.name          = 'easy_sax'
   spec.version       = EasySax::VERSION
-  spec.authors       = ['Eric Northam']
-  spec.email         = ['eric@easybroker.com']
+  spec.authors       = ['Eric Northam', 'Jonathan Monsalve']
+  spec.email         = ['eric@easybroker.com', 'j.jmonsalveg@gmail.com']
 
   spec.summary       = 'A simple SAX parser that enables parsing of large files without the messy syntax of typical SAX parsers.'
-  spec.description   = 'A simple SAX parser that enables parsing of large files without the messy syntax of typical SAX parsers. Currently depends on Nokogiri.'
+  spec.description   = 'A simple SAX parser that enables parsing of large files without the messy syntax of typical SAX parsers. Currently depends on Nokogiri|Ox.'
   spec.homepage      = 'https://github.com/easybroker/easy_sax'
   spec.license       = 'MIT'
 

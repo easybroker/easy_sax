@@ -150,6 +150,87 @@ Property id[4] agency id[2]
 You can also use `ignore` to speed up the parser by allowing it to know that it
 doesn't need to keep track of the those elements.
 
+## Performance improvement(alpha version)
+
+Currently there are two parser methods `EasySax.parser` is currently well
+tested in production using parser. There is a new method named `ox_parser` that
+is backward compatible with current code and examples listed in this readme.
+
+Behind scenes the improvement is due the replacement of nokogiri for ox.
+
+### Benchmark setup
+
+```text
+OS: macOS Sequoia 15.1.1 arm64
+Host: MacBook Pro (14-inch, 2021)
+Kernel: Darwin 24.1.0
+CPU: Apple M1 Pro (8) @ 3.23 GHz
+GPU: Apple M1 Pro (14) @ 1.30 GHz [Integrated]
+Memory: 32.00 GiB
+ruby 3.3.6 (2024-11-05 revision 75015d4c1f) [arm64-darwin24]
+```
+
+### Results
+
+```text
+Time Benchmark:
+                 user     system      total        real
+Nokogiri:    0.000114   0.000015   0.000129 (  0.000128)
+Ox:          0.000058   0.000002   0.000060 (  0.000062)
+
+Memory Benchmark:
+
+Nokogiri Parser:
+Total allocated memory: 22.90625 KB
+Total retained memory:  0.0 KB
+Total objects allocated: 430
+Total objects retained:  0
+
+Ox Parser:
+Total allocated memory: 14.984375 KB
+Total retained memory:  0.078125 KB
+Total objects allocated: 205
+Total objects retained:  2
+```
+
+### Performance Conclusion
+
+The new ox_parser demonstrates significant performance improvements over the
+EasySax parser that relies on Nokogiri. Below is a summary of the key metrics:
+
+1. Execution Time:
+
+   - ox_parser is ~52% faster than EasySax in terms of real execution time.
+   - Nokogiri: 0.000128 seconds
+   - Ox: 0.000062 seconds
+
+2. Memory Usage:
+
+   - Total allocated memory is reduced by ~35% when using ox_parser.
+     Nokogiri: 22.91 KB
+     Ox: 14.98 KB
+
+   - Object allocation is reduced by ~52%, making Ox more efficient:
+     Nokogiri: 430 objects
+     Ox: 205 objects
+
+3. Retained Memory:
+   - While Nokogiri retains 0 KB, ox_parser retains a negligible amount of
+     0.078 KB due to its design. However, the overall efficiency in memory
+     allocation offsets this minor difference.
+
+### Why Switch to ox_parser?
+
+- Speed: The ox_parser is approximately 2x faster, ensuring faster XML parsing
+  for applications with high performance needs.
+- Efficiency: Reduces memory usage significantly, benefiting applications
+  running in constrained environments.
+- Backward Compatibility: ox_parser works seamlessly with existing code and
+  examples listed in this README.
+
+> [!CAUTION]
+> `ox_parser` needs test and monitoring in production environments.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
