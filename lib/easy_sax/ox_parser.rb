@@ -1,59 +1,61 @@
 require 'active_support/core_ext/object/blank'
-require 'nokogiri'
+require 'ox'
 
 module EasySax
-  class Parser < Nokogiri::XML::SAX::Document
+  class OxParser < ::Ox::Sax
     attr_reader :io,
                 :target_element,
                 :callback,
                 :ignorable_elements,
                 :array_elements,
-                :element_stack,
-                :element_text
+                :element_stack
 
     def initialize(io)
       @io = io
     end
 
     def parse_each(target_element, ignore: [], arrays: [], &block)
-      validate_array(:arrays, arrays)
       @target_element = target_element.to_s
       @ignorable_elements = validate_array(:ignore, ignore)
       @array_elements = validate_array(:arrays, arrays)
       @element_stack = []
       @callback = block
-      Nokogiri::XML::SAX::Parser.new(self).parse(io)
+      Ox.sax_parse(self, @io)
     end
 
-    def start_element(name, attrs = [])
-      return if ignorable_elements.include?(name)
+    def start_element(name)
+      return if ignorable_elements.include?(name.to_s)
 
-      @element_text = ''
       parent = element_stack.last
+      element = EasySax::SimpleElement.new(name.to_s, {})
 
       if parent.nil?
-        element_stack << EasySax::SimpleElement.new(name, attrs.to_h)
+        element_stack << element
       else
-        add_child(parent, name, attrs)
+        add_child(parent, element)
       end
     end
 
-    def characters(string)
-      @element_text << string if element_text
+    def text(value)
+      return unless element_stack.last
+
+      element_stack.last.text ||= ''
+      element_stack.last.text << value.strip
     end
 
-    def cdata_block(string)
-      characters(string)
+    def attr(name, value)
+      element_stack.last.attrs[name.to_s] = value
+    end
+
+    def cdata(string)
+      text(string)
     end
 
     def end_element(name)
-      return if ignorable_elements.include?(name)
+      return if ignorable_elements.include?(name.to_s)
 
       element = element_stack.pop
-      return if element.is_a?(Array)
-
-      element.text = element_text.strip if element_text.present?
-      callback.call element, element_stack.first if name == target_element
+      callback.call element, element_stack.first if name.to_s == target_element
     end
 
     def error(string)
@@ -72,17 +74,15 @@ module EasySax
       end
     end
 
-    def add_child(parent, name, attrs)
-      if array_elements.include?(name)
-        parent[name] = []
-        element_stack << parent[name]
+    def add_child(parent, element)
+      if array_elements.include?(element.name)
+        parent[element.name] = []
+        element_stack << parent[element.name]
       else
-        element = EasySax::SimpleElement.new(name, attrs.to_h)
-
         if parent.is_a?(Array)
           parent << element
-        elsif name != target_element
-          parent[name] = element
+        elsif element.name != target_element
+          parent[element.name] = element
         end
 
         element_stack << element
