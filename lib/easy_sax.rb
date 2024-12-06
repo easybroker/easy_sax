@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'easy_sax/version'
 require 'easy_sax/parse_error'
 require 'easy_sax/simple_element'

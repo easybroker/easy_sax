@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 require 'pry'
 
@@ -54,7 +56,7 @@ module ParserTestHelper
         }
       ]
     }
-  }
+  }.freeze
 
   PROPERTY_2 = {
     attrs: { 'id' => '3' },
@@ -71,7 +73,7 @@ module ParserTestHelper
         }
       ]
     }
-  }
+  }.freeze
 
   PROPERTY_3 = {
     attrs: { 'id' => '4' },
@@ -88,7 +90,7 @@ module ParserTestHelper
         }
       ]
     }
-  }
+  }.freeze
 
   def test_that_it_has_a_version_number
     refute_nil ::EasySax::VERSION
