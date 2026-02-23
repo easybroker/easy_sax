@@ -13,6 +13,7 @@ Gem::Specification.new do |spec|
   spec.description   = "A simple SAX parser that enables parsing of large files without the messy syntax of typical SAX parsers. Currently depends on Nokogiri."
   spec.homepage      = "https://github.com/easybroker/easy_sax"
   spec.license       = "MIT"
+  spec.required_ruby_version = ">= 3.2.0"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
