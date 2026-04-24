@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    easy_sax (0.3.0)
+    easy_sax (0.3.1)
       activesupport (>= 7.2.3.1, < 8.0)
       nokogiri (~> 1.19.1)
 
