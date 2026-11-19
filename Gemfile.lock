@@ -1,42 +1,43 @@
 PATH
   remote: .
   specs:
-    easy_sax (0.3.2)
-      activesupport (>= 7.2.3.1, < 8.0)
-      nokogiri (~> 1.19.4)
+    easy_sax (0.4.0)
+      activesupport (>= 8.1.4.1, < 9.0)
+      nokogiri (~> 1.19.5)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (7.2.3.1)
+    activesupport (8.1.4.1)
       base64
-      benchmark (>= 0.3)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.3.1)
       connection_pool (>= 2.2.5)
       drb
       i18n (>= 1.6, < 2)
+      json
       logger (>= 1.4.2)
-      minitest (>= 5.1, < 6)
+      minitest (>= 5.1)
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
+      uri (>= 0.13.1)
     base64 (0.3.0)
-    benchmark (0.5.0)
-    bigdecimal (4.1.2)
+    bigdecimal (4.1.3)
     coderay (1.1.3)
-    concurrent-ruby (1.3.7)
-    connection_pool (3.0.2)
+    concurrent-ruby (1.3.8)
+    connection_pool (3.0.3)
     drb (2.2.3)
-    i18n (1.14.8)
+    i18n (1.15.2)
       concurrent-ruby (~> 1.0)
+    json (3.1.0)
     logger (1.7.0)
     method_source (1.1.0)
     minitest (5.27.0)
-    nokogiri (1.19.4-arm64-darwin)
+    nokogiri (1.19.7-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.19.4-x86_64-darwin)
+    nokogiri (1.19.7-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.19.4-x86_64-linux-gnu)
+    nokogiri (1.19.7-x86_64-linux-gnu)
       racc (~> 1.4)
     pry (0.15.2)
       coderay (~> 1.1)
@@ -46,6 +47,7 @@ GEM
     securerandom (0.4.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    uri (1.1.2)
 
 PLATFORMS
   arm64-darwin-21
